@@ -1,6 +1,7 @@
 package hellojpa;
 
 import hellojpa.domain.Book;
+import hellojpa.domain.Member;
 import hellojpa.domain.Order;
 import hellojpa.domain.OrderItem;
 
@@ -20,11 +21,15 @@ public class JpaMain {
         tx.begin();
 
         try{
-            Book book = new Book();
-            book.setName("JPA");
-            book.setAuthor("김영한");
+            Member member = new Member();
+            member.setName("member1");
+            em.persist(member);
 
-            em.persist(book);
+            em.flush();
+            em.clear();
+
+            Member refMember = em.getReference(Member.class, member.getId());   // proxy
+            System.out.println("refMember = " + refMember.getClass());
 
             tx.commit();
         }catch (Exception e){
